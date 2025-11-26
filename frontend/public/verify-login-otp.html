@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Verify Login OTP</title>
+</head>
+<body style="font-family:Arial; padding:40px; max-width:400px; margin:auto">
+
+<h2>Confirm Login</h2>
+
+<input id="email" disabled />
+<input id="otp" placeholder="Enter OTP" />
+
+<button onclick="verifyOTP()">Verify OTP</button>
+<button onclick="resendOTP()">Resend OTP</button>
+
+<p id="msg"></p>
+
+<script>
+const API = "http://localhost:5000/auth";
+
+window.onload = () => {
+  const params = new URLSearchParams(window.location.search);
+  document.getElementById("email").value = params.get("email");
+};
+
+async function verifyOTP() {
+  const res = await fetch(`${API}/verify-otp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: email.value,
+      otp: otp.value
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    localStorage.setItem("token", data.token);
+    window.location.href = "success.html";
+  } else {
+    document.getElementById("msg").innerText = data.message;
+  }
+}
+
+async function resendOTP() {
+  await fetch(`${API}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email.value, password: "dummy" })
+  });
+  alert("OTP resent!");
+}
+</script>
+
+</body>
+</html>

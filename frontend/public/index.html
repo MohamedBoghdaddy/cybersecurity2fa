@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OTP Login Demo</title>
+  <style>
+    body { font-family: Arial; padding: 40px; max-width: 450px; margin: auto; }
+    input { width: 100%; padding: 12px; margin: 8px 0; }
+    button { width: 100%; padding: 12px; margin-top: 10px; background: black; color: white; border: none; }
+  </style>
+</head>
+<body>
+
+<h2>Register</h2>
+<input id="regEmail" placeholder="Email" />
+<input id="regPass" placeholder="Password" type="password" />
+<button onclick="register()">Register</button>
+
+<hr>
+
+<h2>Login</h2>
+<input id="logEmail" placeholder="Email" />
+<input id="logPass" placeholder="Password" type="password" />
+<button onclick="login()">Login</button>
+
+<hr>
+
+<h2>Verify OTP</h2>
+<input id="otpEmail" placeholder="Email" />
+<input id="otpCode" placeholder="Enter OTP" />
+<button onclick="verifyOTP()">Verify</button>
+
+<script>
+  const API = "http://localhost:5000/auth";
+
+  async function register() {
+    const res = await fetch(`${API}/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: regEmail.value,
+        password: regPass.value
+      })
+    });
+    alert((await res.json()).message);
+  }
+
+  async function login() {
+    const res = await fetch(`${API}/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: logEmail.value,
+        password: logPass.value
+      })
+    });
+    alert((await res.json()).message);
+  }
+
+  async function verifyOTP() {
+    const res = await fetch(`${API}/verify-otp`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: otpEmail.value,
+        otp: otpCode.value
+      })
+    });
+    alert(JSON.stringify(await res.json()));
+  }
+</script>
+</body>
+</html>

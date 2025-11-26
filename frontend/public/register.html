@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Register</title>
+</head>
+<body style="font-family:Arial; padding:40px; max-width:400px; margin:auto">
+
+<h2>Create Account</h2>
+
+<input id="email" placeholder="Email" />
+<input id="password" placeholder="Password" type="password" />
+
+<button onclick="register()">Register</button>
+
+<p id="msg"></p>
+
+<script>
+const API = "http://localhost:5000/auth";
+
+async function register() {
+  const res = await fetch(`${API}/register`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value
+    })
+  });
+
+  const data = await res.json();
+  document.getElementById("msg").innerText = data.message;
+
+  if (data.success) {
+    // go to enable 2FA page
+    window.location.href = `enable2fa.html?email=${email.value}`;
+  }
+}
+</script>
+
+</body>
+</html>

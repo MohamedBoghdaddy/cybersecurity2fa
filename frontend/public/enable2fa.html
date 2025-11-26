@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Enable 2FA</title>
+</head>
+<body style="font-family:Arial; padding:40px; max-width:400px; margin:auto">
+
+<h2>Verify Your Email</h2>
+
+<div>
+  <label>Email</label>
+  <input id="email" disabled />
+</div>
+
+<input id="otp" placeholder="Enter OTP" />
+
+<button onclick="verify()">Verify & Enable 2FA</button>
+<button onclick="resend()">Resend OTP</button>
+
+<p id="msg"></p>
+
+<script>
+const API = "http://localhost:5000/auth";
+
+window.onload = () => {
+  const url = new URLSearchParams(window.location.search);
+  document.getElementById("email").value = url.get("email");
+};
+
+async function verify() {
+  const res = await fetch(`${API}/verify-otp`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      email: email.value,
+      otp: otp.value
+    })
+  });
+
+  const data = await res.json();
+  document.getElementById("msg").innerText = data.message;
+
+  if (data.success) {
+    window.location.href = "login.html";
+  }
+}
+
+async function resend() {
+  // Use login API to resend OTP
+  await fetch(`${API}/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: email.value, password: "dummy" }) // backend login requires password
+  });
+
+  alert("OTP resent!");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Success</title>
+</head>
+<body style="font-family:Arial; padding:40px; max-width:400px; margin:auto">
+
+<h2>Login Successful 🎉</h2>
+
+<p>You are now logged in with OTP 2FA.</p>
+
+<p><b>Your token:</b></p>
+<pre id="tokenBox"></pre>
+
+<script>
+document.getElementById("tokenBox").innerText = localStorage.getItem("token");
+</script>
+
+</body>
+</html>
